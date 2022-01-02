@@ -15,14 +15,21 @@ const httpServer = http.createServer(app);
 const handleListen = () => console.log(`Listening on ws://localhost:3000`);
 const server = http.createServer(app);
 const wss = new WebSocket.Server({server});
+const sockets = [];
 
-    // 여기에서의 socket은 연결된 브라우저를 뜻함
+
+// 여기에서의 socket은 연결된 브라우저를 뜻함
 wss.on("connection", (socket) => {
-    socket.on('close', () => {
-        console.log("Connected to Server ❌");
+    // connection이 생기면 socket을 받게 된다.
+    sockets.push(socket);
+    socket.on('open', () => {console.log("Connected to Server ❌");})
+    socket.on("close", () => {
+        console.log("Disconnected from Server ❌");
     })
-    socket.send("Hello!");
-    console.log("Connected to Browser ✔");
+    socket.on("message", (message) => {
+        sockets.forEach(aSocket => aSocket.send(message));
+    })
+    // socket.send() : backend에서 front-end로 보내는 것.
 })
 
 server.listen(3000, handleListen);
