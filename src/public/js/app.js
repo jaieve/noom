@@ -2,17 +2,21 @@ const socket = io();
 
 const welcome = document.getElementById("welcome");
 const form = welcome.querySelector("form");
+const room = document.getElementById( "room");
+let roomName;
 
-function backEndDone(timestamp) {
-    console.log(timestamp);
-    console.log("server process is Done!");
+function showRoom() {
+    welcome.hidden = true;
+    room.hidden = false;
+    const h3 = room.querySelector('h3');
+    h3.innerText = `Room ${roomName}`;
 }
 
 function handleRoomSubmit(event) {
     event.preventDefault();
     const input = form.querySelector('input');
-    socket.emit("testroom", {payload : input.value}, backEndDone); //room이라는 이벤트를 보내는 것. 3rd args callback funciton
-    // backend로 object를 보낼 수 있다.
+    roomName = input.value;
+    socket.emit("enter_room",roomName, showRoom); //room이라는 이벤트를 보내는 것. 3rd args callback funciton
     input.value="";
 }
 

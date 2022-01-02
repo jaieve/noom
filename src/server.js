@@ -15,10 +15,12 @@ const server = http.createServer(app);
 const io = SocketIO(server);
 
 io.on("connection", socket => {
-    socket.on("testroom", (msg, callback) => {
-        console.log(msg); // msg is javascript object!
-        const now = new Date();
-        callback(now);
+    socket.onAny((e) => {
+        console.log(`socket event: ${e}`);
+    })
+    socket.on("enter_room", (roomName, done) => {
+        socket.join(roomName);
+        done();
     });
 });
 
