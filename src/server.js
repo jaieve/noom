@@ -22,12 +22,24 @@ const sockets = [];
 wss.on("connection", (socket) => {
     // connection이 생기면 socket을 받게 된다.
     sockets.push(socket);
+    socket['nickname'] = "Anon";
     socket.on('open', () => {console.log("Connected to Server ❌");})
     socket.on("close", () => {
         console.log("Disconnected from Server ❌");
     })
-    socket.on("message", (message) => {
-        sockets.forEach(aSocket => aSocket.send(message));
+    socket.on("message", (msg) => {
+        const messageObject = JSON.parse(msg);
+        switch (messageObject.type){
+            case "new_message":
+                sockets.forEach((aSocket) =>
+                    aSocket.send(`${socket.nickname}: ${messageObject.payload}`)
+                );
+                break
+            case "nickname":
+                console.log("save nickname: ", messageObject.payload);
+                socket.nickname = messageObject.payload;
+                break
+        }
     })
     // socket.send() : backend에서 front-end로 보내는 것.
 })
