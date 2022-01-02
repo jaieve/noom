@@ -15,12 +15,11 @@ const server = http.createServer(app);
 const io = SocketIO(server);
 
 io.on("connection", socket => {
-    socket.on("testroom", (msg, done) => {
+    socket.on("testroom", (msg, callback) => {
         console.log(msg); // msg is javascript object!
-        setTimeout(() => {
-            done();
-        }, 1000)
-    })
+        const now = new Date();
+        callback(now);
+    });
 });
 
 const handleListen = () => console.log(`Listening on ws://localhost:3000`);
