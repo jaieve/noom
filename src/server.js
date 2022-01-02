@@ -36,7 +36,6 @@ wss.on("connection", (socket) => {
                 );
                 break
             case "nickname":
-                console.log("save nickname: ", messageObject.payload);
                 socket.nickname = messageObject.payload;
                 break
         }
