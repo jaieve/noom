@@ -124,7 +124,7 @@ socket.on("welcome", async () => {
 })
 
 socket.on("offer", offer => {
-    console.log(offer);
+    myPeerConnection.setLocalDescription(offer);
 });
 
 // RTC Code
