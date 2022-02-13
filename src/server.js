@@ -23,6 +23,15 @@ io.on("connection", socket => {
         done();
         socket.to(roomName).emit("welcome");
     });
+    socket.on("disconnecting", () => {
+        socket.rooms.forEach(room => {
+            socket.to(room).emit("bye");
+        })
+    });
+    socket.on("new_message", (msg, roomName, done) => {
+        socket.to(roomName).emit("new_message", msg);
+        done();
+    })
 });
 
 const handleListen = () => console.log(`Listening on ws://localhost:3000`);
