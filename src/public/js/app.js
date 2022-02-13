@@ -7,6 +7,7 @@ let roomName;
 
 function addMessage(msg) {
     const ul = room.querySelector('ul');
+
     const li = document.createElement('li')
     li.innerText = msg;
     ul.appendChild(li);
@@ -60,3 +61,17 @@ socket.on("bye", (left) => {
 
 // socket.on("new_message", (msg) => {addMessage(msg)});
 socket.on("new_message", addMessage);
+
+socket.on("room_change", (rooms) => {
+    const roomList = welcome.querySelector("ul");
+    roomList.innerHTML="";
+    if (rooms.length === 0) {
+        roomList.innerText="";
+        return;
+    }
+    rooms.forEach(room => {
+        const li = document.createElement("li");
+        li.innerText = room;
+        roomList.append(li);
+    })
+});
